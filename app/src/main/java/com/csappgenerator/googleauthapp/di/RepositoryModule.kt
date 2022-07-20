@@ -25,16 +25,6 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideDataStore(
-        @ApplicationContext context: Context
-    ): DataStore<Preferences> {
-        return PreferenceDataStoreFactory.create(
-            produceFile = { context.preferencesDataStoreFile(PREFERENCES_NAME) }
-        )
-    }
-
-    @Provides
-    @Singleton
     fun provideAuthRepository(dataStore: DataStore<Preferences>): AuthRepository {
         return AuthRepositoryImpl(dataStore)
     }

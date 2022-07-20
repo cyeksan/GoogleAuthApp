@@ -1,11 +1,18 @@
 package com.csappgenerator.googleauthapp.di
 
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStoreFile
 import com.csappgenerator.googleauthapp.data.remote.KtorApi
+import com.csappgenerator.googleauthapp.util.Constants
 import com.csappgenerator.googleauthapp.util.Constants.BASE_URL
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -55,4 +62,13 @@ object NetworkModule {
         return retrofit.create(KtorApi::class.java)
     }
 
+    @Provides
+    @Singleton
+    fun provideDataStore(
+        @ApplicationContext context: Context
+    ): DataStore<Preferences> {
+        return PreferenceDataStoreFactory.create(
+            produceFile = { context.preferencesDataStoreFile(Constants.PREFERENCES_NAME) }
+        )
+    }
 }
